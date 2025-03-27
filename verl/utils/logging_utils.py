@@ -21,7 +21,20 @@ def set_basic_config(level):
     """
     This function sets the global logging format and level. It will be called when import verl
     """
-    logging.basicConfig(format='%(levelname)s:%(asctime)s:%(message)s', level=level)
+    # Set a cleaner format without ANSI color codes
+    logging.basicConfig(
+        format='%(asctime)s - %(levelname)s - %(message)s',
+        level=level,
+        datefmt='%Y-%m-%d %H:%M:%S'
+    )
+    
+    # Disable Ray's color output
+    os.environ['RAY_COLOR'] = '0'
+    
+    # Set Ray's logging level
+    os.environ['RAY_DEDUP_LOGS'] = '0'
+    os.environ['NCCL_DEBUG'] = 'WARN'
+    os.environ['VLLM_LOGGING_LEVEL'] = 'WARN'
 
 
 def log_to_file(string):
